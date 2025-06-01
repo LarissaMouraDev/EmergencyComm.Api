@@ -1,0 +1,138 @@
+@EmergencyComm.Api_HostAddress = https://localhost:7245
+
+### Get all devices
+GET {{EmergencyComm.Api_HostAddress}}/api/devices
+Accept: application/json
+
+### Register a new device
+POST {{EmergencyComm.Api_HostAddress}}/api/devices/register
+Content-Type: application/json
+
+{
+  "id": "mobile-001",
+  "name": "Emergency Response Mobile",
+  "deviceType": "Mobile",
+  "latitude": -23.5505,
+  "longitude": -46.6333,
+  "batteryLevel": 85,
+  "networkType": "WiFiDirect",
+  "signalStrength": 95.0
+}
+
+### Get nearby devices
+GET {{EmergencyComm.Api_HostAddress}}/api/devices/nearby?latitude=-23.5505&longitude=-46.6333&radiusKm=5
+Accept: application/json
+
+### Update device location
+PUT {{EmergencyComm.Api_HostAddress}}/api/devices/mobile-001/location
+Content-Type: application/json
+
+{
+  "latitude": -23.5515,
+  "longitude": -46.6343,
+  "altitude": 800.0
+}
+
+### Get all messages
+GET {{EmergencyComm.Api_HostAddress}}/api/messages
+Accept: application/json
+
+### Send a message
+POST {{EmergencyComm.Api_HostAddress}}/api/messages
+Content-Type: application/json
+
+{
+  "senderId": "mobile-001",
+  "content": "Testando sistema de comunicação de emergência",
+  "messageType": "Text",
+  "priority": "Normal",
+  "latitude": -23.5505,
+  "longitude": -46.6333,
+  "recipientIds": ["device-001", "device-002"]
+}
+
+### Send emergency broadcast
+POST {{EmergencyComm.Api_HostAddress}}/api/messages
+Content-Type: application/json
+
+{
+  "senderId": "mobile-001",
+  "content": "ALERTA DE EMERGÊNCIA: Evacuação imediata necessária na área do centro da cidade devido a risco de deslizamento.",
+  "messageType": "Emergency",
+  "priority": "Critical",
+  "isEmergency": true,
+  "isBroadcast": true,
+  "latitude": -23.5505,
+  "longitude": -46.6333,
+  "maxHops": 10
+}
+
+### Get emergency messages
+GET {{EmergencyComm.Api_HostAddress}}/api/messages/emergency
+Accept: application/json
+
+### Get all resources
+GET {{EmergencyComm.Api_HostAddress}}/api/resources
+Accept: application/json
+
+### Create a shelter resource
+POST {{EmergencyComm.Api_HostAddress}}/api/resources
+Content-Type: application/json
+
+{
+  "name": "Centro de Evacuação - Ginásio Municipal",
+  "type": "Shelter",
+  "description": "Abrigo temporário com capacidade para 500 pessoas, com banheiros, cozinha e área médica",
+  "latitude": -23.5525,
+  "longitude": -46.6353,
+  "providerId": "mobile-001",
+  "capacity": 500,
+  "currentUsage": 125,
+  "priority": "High",
+  "contactName": "Coordenador de Emergência",
+  "contactPhone": "(11) 98765-4321",
+  "accessInstructions": "Entrada pela porta principal. Documentos necessários para registro.",
+  "requirements": "Documento de identificação"
+}
+
+### Get nearby resources
+GET {{EmergencyComm.Api_HostAddress}}/api/resources/nearby?latitude=-23.5505&longitude=-46.6333&radiusKm=10
+Accept: application/json
+
+### Get resources by type
+GET {{EmergencyComm.Api_HostAddress}}/api/resources/type/Shelter
+Accept: application/json
+
+### Get all danger zones
+GET {{EmergencyComm.Api_HostAddress}}/api/dangerzones
+Accept: application/json
+
+### Create a danger zone
+POST {{EmergencyComm.Api_HostAddress}}/api/dangerzones
+Content-Type: application/json
+
+{
+  "name": "Área de Risco - Encosta Norte",
+  "type": "Landslide",
+  "description": "Risco iminente de deslizamento devido às chuvas intensas das últimas 48 horas",
+  "latitude": -23.5545,
+  "longitude": -46.6373,
+  "radiusMeters": 800,
+  "severityLevel": "Critical",
+  "reportedBy": "mobile-001",
+  "safetyInstructions": "EVACUAÇÃO IMEDIATA. Não retornar à área até liberação oficial dos bombeiros.",
+  "evacuationRoute": "Seguir pela Avenida Principal em direção ao centro. Ponto de encontro: Praça Central.",
+  "emergencyContact": "193 - Corpo de Bombeiros"
+}
+
+### Get nearby danger zones
+GET {{EmergencyComm.Api_HostAddress}}/api/dangerzones/nearby?latitude=-23.5505&longitude=-46.6333&radiusKm=5
+Accept: application/json
+
+### Get danger zones by severity
+GET {{EmergencyComm.Api_HostAddress}}/api/dangerzones/severity/Critical
+Accept: application/json
+
+### Health check
+GET {{EmergencyComm.Api_HostAddress}}/api/devices/online
+Accept: application/json
